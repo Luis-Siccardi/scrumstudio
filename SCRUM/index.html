@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrum - Marco de Trabajo Ágil</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>SCRUM</h1>
+            <p class="subtitle">Marco de trabajo ágil para la gestión de proyectos</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <h2>¿Qué es Scrum?</h2>
+            <p>Scrum es un <span class="highlight">marco de trabajo adaptable, iterativo, flexible e incremental</span>, diseñado para entregar valor continuamente de forma rápida en la gestión de proyectos.</p>
+            
+            <h3>¿Por qué es importante?</h3>
+            <ul>
+                <li>Permite adaptarse a cambios y maximizar el valor entregado</li>
+                <li>Entregan incrementos funcionales del producto regularmente</li>
+                <li>Usa equipos multidisciplinarios, autoorganizados, empoderados</li>
+                <li>Sirve para cualquier tipo de proyecto</li>
+            </ul>
+
+            <h3>Scrum vs Gestión Tradicional (Cascada)</h3>
+            <div class="comparison">
+                <div class="comparison-item scrum-side">
+                    <h4>🚀 Scrum</h4>
+                    <ul>
+                        <li>Proceso iterativo y flexible</li>
+                        <li>Los cambios son bienvenidos</li>
+                        <li>Entregas frecuentes</li>
+                        <li>Equipos autoorganizados</li>
+                    </ul>
+                </div>
+                <div class="comparison-item traditional-side">
+                    <h4>📋 Cascada</h4>
+                    <ul>
+                        <li>Proceso secuencial y lineal</li>
+                        <li>El cambio no es bien recibido</li>
+                        <li>Entregas al final del proyecto</li>
+                        <li>Jerarquías tradicionales</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Los 3 Pilares de Scrum</h2>
+            <div class="pillars">
+                <div class="pillar">
+                    <h4>🔍 Transparencia</h4>
+                    <p>Todos los aspectos del proceso deben ser visibles para los responsables del resultado</p>
+                </div>
+                <div class="pillar">
+                    <h4>🔎 Inspección</h4>
+                    <p>Los usuarios de Scrum deben inspeccionar frecuentemente los artefactos y el progreso</p>
+                </div>
+                <div class="pillar">
+                    <h4>🔄 Adaptación</h4>
+                    <p>Si un inspector determina que uno o más aspectos de un proceso se desvían, debe ajustarse</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>6 Principios Fundamentales de Scrum</h2>
+            <div class="principles-grid">
+                <div class="principle">
+                    <h4>1. Control de Proceso Empírico</h4>
+                    <p>Basado en transparencia, inspección y adaptación</p>
+                </div>
+                <div class="principle">
+                    <h4>2. Autoorganización</h4>
+                    <p>Equipos sin jerarquías, con responsabilidad individual</p>
+                </div>
+                <div class="principle">
+                    <h4>3. Colaboración</h4>
+                    <p>Trabajo conjunto entre equipo, cliente e interesados</p>
+                </div>
+                <div class="principle">
+                    <h4>4. Priorización Basada en Valor</h4>
+                    <p>Entregar el más alto valor primero, definido por el cliente</p>
+                </div>
+                <div class="principle">
+                    <h4>5. Time-boxing</h4>
+                    <p>Límites de tiempo fijos para todas las actividades</p>
+                </div>
+                <div class="principle">
+                    <h4>6. Desarrollo Iterativo</h4>
+                    <p>Progreso en ciclos cortos para adaptarse a cambios</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Roles en Scrum</h2>
+            
+            <h3>Roles Principales</h3>
+            <div class="roles-container">
+                <div class="role">
+                    <h4>👤 Product Owner</h4>
+                    <p>Voz del cliente, define las características del producto</p>
+                </div>
+                <div class="role">
+                    <h4>🎯 Scrum Master</h4>
+                    <p>Líder de apoyo, crea el ambiente adecuado</p>
+                </div>
+                <div class="role">
+                    <h4>👥 Equipo Scrum</h4>
+                    <p>6-10 personas, autoorganizados, sin jerarquías</p>
+                </div>
+            </div>
+
+            <button class="interactive-button" onclick="toggleContent('secondary-roles')">
+                Ver Roles Secundarios
+            </button>
+            <div id="secondary-roles" class="hidden-content">
+                <ul>
+                    <li><strong>Stakeholders:</strong> inversores, usuarios, clientes, patrocinadores</li>
+                    <li><strong>Servicios de apoyo:</strong> logística, capacitación</li>
+                    <li><strong>Proveedores:</strong> servicios externos</li>
+                    <li><strong>Scrum Guidance Body:</strong> guía consultiva</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>5 Fases de Scrum</h2>
+            <div class="phases">
+                <div class="phase" onclick="showPhase('inicio')">1. Inicio</div>
+                <div class="phase" onclick="showPhase('planificacion')">2. Planificación</div>
+                <div class="phase" onclick="showPhase('implementacion')">3. Implementación</div>
+                <div class="phase" onclick="showPhase('revision')">4. Revisión</div>
+                <div class="phase" onclick="showPhase('liberacion')">5. Liberación</div>
+            </div>
+
+            <div id="phase-details">
+                <p>Haz clic en una fase para ver sus procesos</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Eventos (Ceremonias) Scrum</h2>
+            <div class="events-list">
+                <div class="event">
+                    <h4>🎯 Sprint Planning</h4>
+                    <p>Se planifica qué se va a hacer en el sprint</p>
+                </div>
+                <div class="event">
+                    <h4>☀️ Daily Scrum</h4>
+                    <p>Reunión diaria breve para sincronizar al equipo</p>
+                </div>
+                <div class="event">
+                    <h4>📋 Sprint Review</h4>
+                    <p>Se muestra lo que se hizo al cliente o interesados</p>
+                </div>
+                <div class="event">
+                    <h4>🔄 Sprint Retrospective</h4>
+                    <p>El equipo reflexiona cómo mejorar para el próximo sprint</p>
+                </div>
+            </div>
+
+            <button class="interactive-button" onclick="toggleContent('other-events')">
+                Ver Otros Eventos
+            </button>
+            <div id="other-events" class="hidden-content">
+                <ul>
+                    <li>Reunión de la visión del proyecto</li>
+                    <li>Reuniones con grupos de usuarios</li>
+                    <li>Reuniones de planificación de la liberación</li>
+                    <li>Reuniones de revisión del backlog priorizado</li>
+                    <li>Reunión de retrospectiva de la liberación</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Gestión de Aspectos Clave</h2>
+            
+            <h3>🎯 Calidad</h3>
+            <ul>
+                <li>Cumplir criterios de aceptación definidos</li>
+                <li>Garantizar que cada entrega tenga calidad</li>
+                <li>Control y mejora continua</li>
+            </ul>
+
+            <h3>⚠️ Gestión de Riesgos</h3>
+            <ol>
+                <li><strong>Identificar</strong> los riesgos potenciales</li>
+                <li><strong>Evaluar</strong> probabilidad, impacto y proximidad</li>
+                <li><strong>Priorizar</strong> por impacto y probabilidad</li>
+                <li><strong>Mitigar</strong> con respuestas proactivas o reactivas</li>
+                <li><strong>Comunicar</strong> a interesados y equipo</li>
+            </ol>
+
+            <h3>🔄 Gestión del Cambio</h3>
+            <p>Scrum está diseñado para aceptar y gestionar cambios mediante un proceso diligente que combina <span class="highlight">cautela + agilidad</span> y <span class="highlight">flexibilidad + estabilidad</span>.</p>
+        </div>
+
+        <div class="section">
+            <h2>Ventajas de Usar Scrum</h2>
+            <div class="advantages">
+                <div class="advantage">
+                    🔄 Flexibilidad ante cambios
+                </div>
+                <div class="advantage">
+                    💬 Mejor comunicación
+                </div>
+                <div class="advantage">
+                    🚀 Entregas frecuentes
+                </div>
+                <div class="advantage">
+                    📈 Mejora continua
+                </div>
+            </div>
+        </div>  
+        <a href="dino-scrum/dino.html" class="btn-dino">🦖 Probar Dino-Scrum</a>       
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
