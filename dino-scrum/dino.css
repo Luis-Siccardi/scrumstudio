@@ -1,0 +1,50 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+  }
+
+  h1{
+      color: #ffffff;
+  }
+  
+  canvas {
+    border: 1px solid rgb(44, 31, 90);
+    background: #fff;
+  }
+  
+  #questionBox {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 2px solid #667eea;
+    border-radius: 12px;
+    padding: 20px;
+    display: none;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    max-width: 300px;
+    text-align: center;
+  }
+  
+  .option {
+    display: block;
+    margin: 5px 0;
+    padding: 8px 12px;
+    background-color: #acbaf6;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .option:hover {
+    background-color: #667eea;
+  }

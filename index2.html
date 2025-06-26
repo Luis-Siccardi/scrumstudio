@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Scrum SBOK® - 50 Preguntas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: #dc2626;
+            margin-bottom: 10px;
+        }
+        
+        .progress {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            background: #3b82f6;
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .question-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .question-number {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        .options {
+            list-style: none;
+        }
+        
+        .option {
+            margin-bottom: 12px;
+        }
+        
+        .option label {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option label:hover {
+            border-color: #3b82f6;
+            background: #f1f5f9;
+        }
+        
+        .option input[type="radio"] {
+            margin-right: 12px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .results {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .score {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .score h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .score-correct {
+            color: #16a34a;
+        }
+        
+        .score-incorrect {
+            color: #dc2626;
+        }
+        
+        .review-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            border-left: 4px solid #e2e8f0;
+        }
+        
+        .review-item.correct {
+            border-left-color: #16a34a;
+            background: #f0fdf4;
+        }
+        
+        .review-item.incorrect {
+            border-left-color: #dc2626;
+            background: #fef2f2;
+        }
+        
+        .review-question {
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .review-answer {
+            margin-bottom: 10px;
+        }
+        
+        .review-explanation {
+            font-size: 14px;
+            color: #6b7280;
+            font-style: italic;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Quiz Scrum SBOK® - Fundamentos</h1>
+            <div class="timer" id="timer">60:00</div>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div id="questionCounter">Pregunta 1 de 50</div>
+        </div>
+        
+        <div id="quizContainer">
+            <div class="question-card">
+                <div class="question-number" id="questionNumber">Pregunta 1</div>
+                <div class="question-text" id="questionText"></div>
+                <ul class="options" id="optionsList"></ul>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>Anterior</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Siguiente</button>
+            </div>
+        </div>
+        
+        <div id="resultsContainer" class="hidden">
+            <div class="results">
+                <div class="score">
+                    <h2 id="finalScore"></h2>
+                    <p id="scoreDescription"></p>
+                </div>
+                <div id="reviewSection"></div>
+                <button class="btn btn-primary" onclick="restartQuiz()">Reiniciar Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "¿Cuál es el propósito principal de Scrum según la Guía SBOK®?",
+                options: ["Reducir costos de desarrollo", "Crear productos de valor para el cliente", "Acelerar el tiempo de desarrollo", "Minimizar defectos"],
+                correct: 1,
+                explanation: "Scrum se centra en crear productos de valor para el cliente a través de iteraciones incrementales y colaboración."
+            },
+            {
+                question: "¿Cuántos roles principales define Scrum?",
+                options: ["2", "3", "4", "5"],
+                correct: 1,
+                explanation: "Scrum define tres roles principales: Product Owner, Scrum Master y Development Team."
+            },
+            {
+                question: "¿Cuál es la duración máxima recomendada para un Sprint?",
+                options: ["2 semanas", "4 semanas", "6 semanas", "8 semanas"],
+                correct: 1,
+                explanation: "La duración máxima recomendada para un Sprint es de 4 semanas o 1 mes."
+            },
+            {
+                question: "¿Quién es responsable de maximizar el valor del producto?",
+                options: ["Scrum Master", "Product Owner", "Development Team", "Stakeholders"],
+                correct: 1,
+                explanation: "El Product Owner es responsable de maximizar el valor del producto y gestionar el Product Backlog."
+            },
+            {
+                question: "¿Cuál es el artefacto que contiene la lista ordenada de todo lo que se conoce que es necesario en el producto?",
+                options: ["Sprint Backlog", "Product Backlog", "Increment", "Definition of Done"],
+                correct: 1,
+                explanation: "El Product Backlog es la lista ordenada de características, funciones, requisitos, mejoras y correcciones."
+            },
+            {
+                question: "¿Cuánto tiempo puede durar máximo una Daily Scrum?",
+                options: ["10 minutos", "15 minutos", "20 minutos", "30 minutos"],
+                correct: 1,
+                explanation: "La Daily Scrum es un evento time-boxed de 15 minutos para el Development Team."
+            },
+            {
+                question: "¿Qué es un Increment en Scrum?",
+                options: ["La suma de todos los elementos del Product Backlog completados durante un Sprint", "Una nueva versión del producto", "Un documento de especificaciones", "Una estimación de trabajo"],
+                correct: 0,
+                explanation: "Un Increment es la suma de todos los elementos del Product Backlog completados durante un Sprint más el valor de los incrementos de todos los Sprints anteriores."
+            },
+            {
+                question: "¿Quién puede cancelar un Sprint?",
+                options: ["Scrum Master", "Development Team", "Product Owner", "Stakeholders"],
+                correct: 2,
+                explanation: "Solo el Product Owner tiene la autoridad para cancelar un Sprint."
+            },
+            {
+                question: "¿Cuál es la principal responsabilidad del Scrum Master?",
+                options: ["Gestionar el equipo", "Facilitar el proceso Scrum", "Definir requisitos", "Desarrollar código"],
+                correct: 1,
+                explanation: "El Scrum Master facilita el proceso Scrum y ayuda a eliminar impedimentos."
+            },
+            {
+                question: "¿Qué significa que Scrum es empírico?",
+                options: ["Se basa en teorías", "Se basa en experiencia y observación", "Es predictivo", "Es planificado completamente"],
+                correct: 1,
+                explanation: "Scrum se basa en el empirismo, donde el conocimiento procede de la experiencia y la toma de decisiones con base en lo conocido."
+            },
+            {
+                question: "¿Cuáles son los tres pilares del empirismo en Scrum?",
+                options: ["Planning, Review, Retrospective", "Transparencia, Inspección, Adaptación", "Roles, Eventos, Artefactos", "Build, Measure, Learn"],
+                correct: 1,
+                explanation: "Los tres pilares del empirismo son Transparencia, Inspección y Adaptación."
+            },
+            {
+                question: "¿Qué es la Definition of Done?",
+                options: ["Lista de tareas completadas", "Entendimiento compartido de lo que significa completar trabajo", "Documentación técnica", "Plan de testing"],
+                correct: 1,
+                explanation: "La Definition of Done es un entendimiento compartido de lo que significa que el trabajo esté completado."
+            },
+            {
+                question: "¿Cuándo se debe actualizar el Sprint Backlog?",
+                options: ["Solo al inicio del Sprint", "Solo al final del Sprint", "Durante todo el Sprint", "Solo en la Daily Scrum"],
+                correct: 2,
+                explanation: "El Sprint Backlog se actualiza durante todo el Sprint conforme se aprende más sobre el trabajo necesario."
+            },
+            {
+                question: "¿Cuál es el objetivo principal de la Sprint Review?",
+                options: ["Evaluar el desempeño del equipo", "Inspeccionar el Increment y adaptar el Product Backlog", "Planificar el próximo Sprint", "Revisar impedimentos"],
+                correct: 1,
+                explanation: "La Sprint Review tiene como objetivo inspeccionar el Increment y adaptar el Product Backlog si es necesario."
+            },
+            {
+                question: "¿Quién participa en la Sprint Retrospective?",
+                options: ["Solo el Scrum Master", "Scrum Team", "Stakeholders", "Product Owner únicamente"],
+                correct: 1,
+                explanation: "La Sprint Retrospective es para el Scrum Team (Product Owner, Scrum Master y Development Team)."
+            },
+            {
+                question: "¿Qué técnica se recomienda para estimar elementos del Product Backlog?",
+                options: ["Horas exactas", "Story Points", "Días calendario", "Porcentajes"],
+                correct: 1,
+                explanation: "Los Story Points son una técnica común para estimar el tamaño relativo de los elementos del Product Backlog."
+            },
+            {
+                question: "¿Cuál es el propósito de la Sprint Planning?",
+                options: ["Revisar el trabajo completado", "Definir qué se puede entregar y cómo se logrará", "Identificar impedimentos", "Actualizar el Product Backlog"],
+                correct: 1,
+                explanation: "La Sprint Planning define qué se puede entregar en el Sprint y cómo se logrará ese trabajo."
+            },
+            {
+                question: "¿Cuál es el tamaño recomendado para un Development Team?",
+                options: ["3-5 personas", "3-9 personas", "5-11 personas", "Sin límite"],
+                correct: 1,
+                explanation: "El tamaño óptimo del Development Team es lo suficientemente pequeño para mantenerse ágil y lo suficientemente grande para completar trabajo significativo (3-9 personas)."
+            },
+            {
+                question: "¿Qué característica NO es típica de un buen Product Backlog?",
+                options: ["Detallado", "Emergente", "Estimado", "Priorizado"],
+                correct: 0,
+                explanation: "Un buen Product Backlog es Emergente, Estimado y Priorizado, pero no necesariamente detallado desde el inicio."
+            },
+            {
+                question: "¿Qué sucede si el Development Team no puede completar todo el trabajo del Sprint Backlog?",
+                options: ["Se extiende el Sprint", "Se negocia con el Product Owner", "Se cancela el Sprint", "Se trabaja horas extra"],
+                correct: 1,
+                explanation: "Si no se puede completar todo el trabajo, el Development Team negocia con el Product Owner sobre el alcance."
+            },
+            {
+                question: "¿Cuál es la diferencia principal entre Product Backlog y Sprint Backlog?",
+                options: [
+                    "No hay diferencia",
+                    "El Sprint Backlog es más detallado",
+                    "El Product Backlog es para un Sprint específico",
+                    "El Sprint Backlog incluye elementos seleccionados del Product Backlog y un plan de entrega"
+                ],
+                correct: 3,
+                explanation: "El Sprint Backlog incluye los elementos seleccionados del Product Backlog para ese Sprint más un plan detallado para entregar el Increment."
+            },
+            {
+                question: "¿Qué rol es responsable de remover impedimentos?",
+                options: ["Product Owner", "Development Team", "Scrum Master", "Stakeholders"],
+                correct: 2,
+                explanation: "El Scrum Master es responsable de ayudar a remover impedimentos que afecten al Development Team."
+            },
+            {
+                question: "¿Cuándo se considera 'Done' un elemento del Product Backlog?",
+                options: ["Cuando el código está escrito", "Cuando pasa las pruebas", "Cuando cumple la Definition of Done", "Cuando el Product Owner lo acepta"],
+                correct: 2,
+                explanation: "Un elemento se considera 'Done' cuando cumple con la Definition of Done definida por el equipo."
+            },
+            {
+                question: "¿Qué es velocity en Scrum?",
+                options: ["Rapidez del equipo", "Cantidad de work completado por Sprint", "Tiempo entre Sprints", "Número de bugs encontrados"],
+                correct: 1,
+                explanation: "Velocity es una medida de la cantidad de trabajo que un Development Team puede completar durante un Sprint."
+            },
+            {
+                question: "¿Cuál es el propósito principal de la Daily Scrum?",
+                options: ["Reportar progreso al management", "Sincronizar actividades y crear un plan para 24 horas", "Resolver problemas técnicos", "Actualizar documentación"],
+                correct: 1,
+                explanation: "La Daily Scrum sincroniza las actividades del Development Team y crea un plan para las siguientes 24 horas."
+            },
+            {
+                question: "¿Qué artefacto es inspeccionado en la Sprint Review?",
+                options: ["Product Backlog", "Sprint Backlog", "Increment", "Definition of Done"],
+                correct: 2,
+                explanation: "En la Sprint Review se inspecciona el Increment creado durante el Sprint."
+            },
+            {
+                question: "¿Cuál es la duración máxima de la Sprint Planning para un Sprint de 4 semanas?",
+                options: ["4 horas", "6 horas", "8 horas", "12 horas"],
+                correct: 2,
+                explanation: "La Sprint Planning está time-boxed a un máximo de 8 horas para un Sprint de un mes."
+            },
+            {
+                question: "¿Qué significa 'auto-organizado' en el contexto del Development Team?",
+                options: ["No necesita management", "Elige cómo hacer su trabajo", "No sigue procesos", "Trabaja independientemente"],
+                correct: 1,
+                explanation: "Un equipo auto-organizado elige cómo realizar mejor su trabajo, en lugar de ser dirigido por otros fuera del equipo."
+            },
+            {
+                question: "¿Cuál es el resultado esperado de una Sprint Retrospective?",
+                options: ["Lista de bugs", "Plan de mejora", "Nuevo Product Backlog", "Estimaciones actualizadas"],
+                correct: 1,
+                explanation: "La Sprint Retrospective debe resultar en un plan de mejora para el próximo Sprint."
+            },
+            {
+                question: "¿Qué principio de Scrum enfatiza la entrega de valor de forma temprana y frecuente?",
+                options: [
+                    "Empirismo",
+                    "Incremento",
+                    "Iteración",
+                    "Colaboración"
+                ],
+                correct: 2,
+                explanation: "El principio de Iteración permite entregar valor al cliente de forma temprana y frecuente mediante ciclos cortos e incrementales."
+            },
+            {
+                question: "¿Quién decide el orden de los elementos en el Product Backlog?",
+                options: ["Scrum Master", "Development Team", "Product Owner", "Stakeholders"],
+                correct: 2,
+                explanation: "El Product Owner es responsable de ordenar los elementos en el Product Backlog."
+            },
+            {
+                question: "¿Cuál es la diferencia entre Sprint Review y Sprint Retrospective?",
+                options: ["No hay diferencia", "Review inspecciona el producto, Retrospective el proceso", "Review es interna, Retrospective es externa", "Review es opcional, Retrospective es obligatoria"],
+                correct: 1,
+                explanation: "La Sprint Review inspecciona el Increment del producto, mientras que la Sprint Retrospective inspecciona el proceso del equipo."
+            },
+            {
+                question: "¿Qué característica debe tener un elemento del Product Backlog para estar 'Ready'?",
+                options: ["Estimado únicamente", "Suficientemente detallado para ser desarrollado en un Sprint", "Aprobado por stakeholders", "Documentado completamente"],
+                correct: 1,
+                explanation: "Un elemento está 'Ready' cuando está suficientemente detallado para que el Development Team pueda completarlo en un Sprint."
+            },
+            {
+                question: "¿Cuál es el beneficio principal de tener Sprints de duración fija?",
+                options: ["Facilita la planificación", "Establece ritmo y predictibilidad", "Reduce costos", "Mejora la calidad"],
+                correct: 1,
+                explanation: "Los Sprints de duración fija establecen un ritmo y predictibilidad que facilita la inspección y adaptación."
+            },
+            {
+                question: "¿Qué debe hacer el Development Team si descubre que necesita más trabajo del estimado originalmente?",
+                options: ["Trabajar horas extra", "Extender el Sprint", "Negociar el alcance con Product Owner", "Posponer para el próximo Sprint"],
+                correct: 2,
+                explanation: "El Development Team debe negociar el alcance con el Product Owner si descubre que necesita más trabajo."
+            },
+            {
+                question: "¿Cuál es el propósito de las estimaciones en Scrum?",
+                options: ["Comprometer fechas de entrega", "Facilitar la planificación y toma de decisiones", "Evaluar performance del equipo", "Calcular costos exactos"],
+                correct: 1,
+                explanation: "Las estimaciones facilitan la planificación y toma de decisiones, no son compromisos firmes."
+            },
+            {
+                question: "¿Qué evento de Scrum no está time-boxed?",
+                options: ["Sprint Planning", "Daily Scrum", "Sprint Review", "Ninguno - todos están time-boxed"],
+                correct: 3,
+                explanation: "Todos los eventos de Scrum están time-boxed para asegurar eficiencia y enfoque."
+            },
+            {
+                question: "¿Cuál es la responsabilidad del Product Owner durante el Sprint?",
+                options: ["Dirigir el Development Team", "Estar disponible para aclaraciones", "Escribir código", "Hacer testing"],
+                correct: 1,
+                explanation: "El Product Owner debe estar disponible para aclarar dudas sobre los elementos del Product Backlog durante el Sprint."
+            },
+            {
+                question: "¿Qué significa 'cross-functional' en el contexto del Development Team?",
+                options: ["Todos saben hacer todo", "El equipo tiene todas las habilidades necesarias", "Trabajan en múltiples proyectos", "Reportan a múltiples managers"],
+                correct: 1,
+                explanation: "Un equipo cross-functional tiene todas las habilidades necesarias para crear el Increment del producto."
+            },
+            {
+                question: "¿Cuándo puede modificarse la composición del Development Team?",
+                options: ["Solo entre Sprints", "En cualquier momento", "Solo con aprobación del Product Owner", "Solo al inicio del proyecto"],
+                correct: 0,
+                explanation: "La composición del Development Team debe modificarse solo entre Sprints para minimizar disrupciones."
+            },
+            {
+                question: "¿Qué sucede si surge trabajo no planificado durante el Sprint?",
+                options: ["Se debe completar obligatoriamente", "Se agrega al Product Backlog", "Se ignora hasta el próximo Sprint", "Se cancela el Sprint"],
+                correct: 1,
+                explanation: "El trabajo no planificado que surge durante el Sprint se agrega al Product Backlog para consideración futura."
+            },
+            {
+                question: "¿Cuál es la principal diferencia entre Scrum y metodologías tradicionales?",
+                options: ["Scrum es más rápido", "Scrum es empírico vs predictivo", "Scrum no requiere documentación", "Scrum es solo para software"],
+                correct: 1,
+                explanation: "Scrum es empírico (basado en experiencia) mientras que las metodologías tradicionales son predictivas (basadas en planes detallados)."
+            },
+            {
+                question: "¿Qué información debe contener un elemento del Product Backlog?",
+                options: ["Solo descripción", "Descripción, valor y estimación", "Solo criterios de aceptación", "Descripción técnica detallada"],
+                correct: 1,
+                explanation: "Un elemento del Product Backlog debe contener descripción, valor de negocio y estimación."
+            },
+            {
+                question: "¿Cuál es el rol del Scrum Master en la Daily Scrum?",
+                options: ["Facilitar la reunión", "Asegurar que el Development Team la realice", "Tomar notas", "Resolver impedimentos inmediatamente"],
+                correct: 1,
+                explanation: "El Scrum Master asegura que el Development Team realice la Daily Scrum, pero el equipo es responsable de dirigirla."
+            },
+            {
+                question: "¿Qué criterio determina cuándo termina un Sprint?",
+                options: ["Cuando se completa todo el trabajo", "Cuando se agota el time-box", "Cuando el Product Owner está satisfecho", "Cuando no hay más impedimentos"],
+                correct: 1,
+                explanation: "Un Sprint termina cuando se agota su time-box, independientemente del trabajo completado."
+            },
+            {
+                question: "¿Cuál es el propósito de mantener un Product Backlog refinado?",
+                options: ["Cumplir con documentación", "Facilitar Sprint Planning eficientes", "Impresionar stakeholders", "Reducir el número de Sprints"],
+                correct: 1,
+                explanation: "Un Product Backlog refinado facilita Sprint Planning más eficientes y efectivas."
+            },
+            {
+                question: "¿Qué debe hacer el Scrum Master si el Product Owner no está cumpliendo su rol efectivamente?",
+                options: ["Reemplazarlo", "Coaching y educación", "Reportar a management", "Ignorar la situación"],
+                correct: 1,
+                explanation: "El Scrum Master debe proporcionar coaching y educación para ayudar al Product Owner a cumplir su rol efectivamente."
+            },
+            {
+                question: "¿Cuál es la diferencia entre 'Done' y 'Accepted' en Scrum?",
+                options: [
+                    "No hay diferencia",
+                    "'Done' es técnico, 'Accepted' es de negocio",
+                    "Son sinónimos en Scrum",
+                    "'Done' incluye criterios de aceptación definidos y puede implicar aceptación del Product Owner"
+                ],
+                correct: 3,
+                explanation: "En Scrum, 'Done' incluye el cumplimiento de todos los criterios técnicos y funcionales. En muchos casos también implica aceptación por parte del Product Owner, pero 'Accepted' puede depender de acuerdos organizacionales."
+            },
+            {
+                question: "¿Qué aspecto de Scrum ayuda más a reducir el riesgo del proyecto?",
+                options: ["Daily Scrums", "Sprints cortos con entregas frecuentes", "Roles definidos", "Artefactos claros"],
+                correct: 1,
+                explanation: "Los Sprints cortos con entregas frecuentes permiten inspección y adaptación temprana, reduciendo significativamente el riesgo."
+            },
+            {
+                question: "¿Cuál es el indicador más importante del éxito de un equipo Scrum?",
+                options: ["Velocity estable", "Pocas horas extra", "Valor entregado al cliente", "Cumplimiento de estimaciones"],
+                correct: 2,
+                explanation: "El indicador más importante del éxito es el valor real entregado al cliente y usuarios finales."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let timeRemaining = 3600; // 60 minutes in seconds
+        let timerInterval;
+        let quizCompleted = false;
+
+        function initializeQuiz() {
+            displayQuestion();
+            startTimer();
+            updateProgress();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function displayQuestion() {
+            const question = questions[currentQuestion];
+            document.getElementById('questionNumber').textContent = `Pregunta ${currentQuestion + 1}`;
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('questionCounter').textContent = `Pregunta ${currentQuestion + 1} de ${questions.length}`;
+            
+            const optionsList = document.getElementById('optionsList');
+            optionsList.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const li = document.createElement('li');
+                li.className = 'option';
+                li.innerHTML = `
+                    <label>
+                        <input type="radio" name="answer" value="${index}" ${userAnswers[currentQuestion] === index ? 'checked' : ''}>
+                        ${option}
+                    </label>
+                `;
+                optionsList.appendChild(li);
+            });
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'Finalizar' : 'Siguiente';
+            
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function saveCurrentAnswer() {
+            const selectedOption = document.querySelector('input[name="answer"]:checked');
+            if (selectedOption) {
+                userAnswers[currentQuestion] = parseInt(selectedOption.value);
+            }
+        }
+
+        function nextQuestion() {
+            saveCurrentAnswer();
+            
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                displayQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function previousQuestion() {
+            saveCurrentAnswer();
+            
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                displayQuestion();
+            }
+        }
+
+        function finishQuiz() {
+            if (quizCompleted) return;
+            
+            quizCompleted = true;
+            clearInterval(timerInterval);
+            saveCurrentAnswer();
+            showResults();
+        }
+
+        function showResults() {
+            document.getElementById('quizContainer').classList.add('hidden');
+            document.getElementById('resultsContainer').classList.remove('hidden');
+            
+            let correctAnswers = 0;
+            const reviewSection = document.getElementById('reviewSection');
+            reviewSection.innerHTML = '<h3>Revisión de Respuestas:</h3>';
+            
+            questions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer === question.correct;
+                if (isCorrect) correctAnswers++;
+                
+                const reviewItem = document.createElement('div');
+                reviewItem.className = `review-item ${isCorrect ? 'correct' : 'incorrect'}`;
+                
+                reviewItem.innerHTML = `
+                    <div class="review-question">${index + 1}. ${question.question}</div>
+                    <div class="review-answer">
+                        <strong>Tu respuesta:</strong> ${userAnswer !== undefined ? question.options[userAnswer] : 'Sin responder'} 
+                        ${isCorrect ? '✓' : '✗'}
+                    </div>
+                    <div class="review-answer">
+                        <strong>Respuesta correcta:</strong> ${question.options[question.correct]}
+                    </div>
+                    <div class="review-explanation">${question.explanation}</div>
+                `;
+                
+                reviewSection.appendChild(reviewItem);
+            });
+            
+            const percentage = Math.round((correctAnswers / questions.length) * 100);
+            document.getElementById('finalScore').innerHTML = `
+                <span class="score-correct">${correctAnswers}</span> / 
+                <span class="score-incorrect">${questions.length}</span> 
+                (${percentage}%)
+            `;
+            
+            let scoreDescription = '';
+            if (percentage >= 85) {
+                scoreDescription = '¡Excelente! Tienes un dominio sólido de los fundamentos de Scrum.';
+            } else if (percentage >= 70) {
+                scoreDescription = 'Buen trabajo. Conoces bien Scrum, pero hay algunas áreas para mejorar.';
+            } else if (percentage >= 50) {
+                scoreDescription = 'Conocimiento básico. Te recomendamos revisar la Guía SBOK® más detalladamente.';
+            } else {
+                scoreDescription = 'Necesitas estudiar más los fundamentos de Scrum. Revisa la Guía SBOK® y practica más.';
+            }
+            
+            document.getElementById('scoreDescription').textContent = scoreDescription;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = [];
+            timeRemaining = 3600;
+            quizCompleted = false;
+            
+            document.getElementById('quizContainer').classList.remove('hidden');
+            document.getElementById('resultsContainer').classList.add('hidden');
+            
+            initializeQuiz();
+        }
+
+        // Initialize quiz when page loads
+        window.addEventListener('load', initializeQuiz);
+    </script>
+</body>
+</html>
